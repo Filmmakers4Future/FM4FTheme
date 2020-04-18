@@ -1,0 +1,13 @@
+.container p,
+.container ol li,
+.container ul li {
+  color: #ffffff;
+}
+
+.podcastaudio {
+  max-width: 600px !important;
+}
+
+.podcastaudio-image {
+  height: 300px !important;
+}
