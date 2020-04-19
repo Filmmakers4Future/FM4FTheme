@@ -8,56 +8,20 @@
     <section class="header-section bg-primary">
       <div class="container">
 <?php
-  if ((null !== value(Themes::class, "header_name")) ||
-      (null !== value(Themes::class, PAGENAME))) {
-    $name = null;
-    if (null !== value(Themes::class, "header_name")) {
-      $name = value(Themes::class, "header_name");
-    }
-    if (null !== value(Themes::class, PAGENAME)) {
-      // combine header name and page name
-      if (null !== $name) {
-        $name .= " - ".value(Themes::class, PAGENAME);
-      } else {
-        $name = value(Themes::class, PAGENAME);
-      }
-    }
+  if (null !== value(Themes::class, PAGENAME)) {
 ?>
-        <h2 class="text-center text-white mt-0"><?= html($name) ?></h2>
+        <h2 class="text-center text-white mt-0"><?= html(value(Themes::class, PAGENAME)) ?></h2>
 <?php
   }
-  if (null !== value(Themes::class, "header_sentence")) {
+  if (null !== value(Themes::class, DESCRIPTION)) {
 ?>
-        <h5 class="text-white mt-0 text-center"><?= html(value(Themes::class, "header_sentence")) ?></h5>
+        <h5 class="text-white mt-0 text-center"><?= html(value(Themes::class, DESCRIPTION)) ?></h5>
 <?php
   }
-  // extract the last modified date
-  $content = value(Main::class, CONTENT);
-  if (0 < count($content)) {
-    $date = null;
-
-    // try to extract the date field from the content
-    $time = value($content[0], DATE);
-    if (is_string($time)) {
-      $time = strtotime($time);
-      if (false !== $time) {
-        $date = date(value(Themes::class, TIMEFORMAT), $time);
-      }
-    }
-
-    // alternatively try to extract the file modified date
-    if (null === $date) {
-      $file = value($content[0], FilePlugin::FILE);
-      if (is_string($file) && is_file($file)) {
-        $date = date(value(Themes::class, TIMEFORMAT), filemtime($file));
-      }
-    }
-
-    if (null !== $date) {
+  if (null !== value(Themes::class, DATE)) {
 ?>
-        <h6 class="text-white-50 mt-0 text-center">(Last update: <?= html($date) ?>)</h6>
+        <h6 class="text-white-50 mt-0 text-center">(Last update: <?= html(value(Themes::class, DATE)) ?>)</h6>
 <?php
-    }
   }
 ?>
       </div>
@@ -70,9 +34,7 @@
   foreach (value(Main::class, CONTENT) as $content_item) {
     $index++;
 
-    $author  = value($content_item, AUTHOR);
     $content = value($content_item, CONTENT).NL;
-    $sticky  = value($content_item, StickyPlugin::STICKY);
     $title   = value($content_item, TITLE);
 
     // get the category string and covert it into an array
@@ -140,7 +102,7 @@
 ?>
         </h3>
 <?php
-    if ((null !== $author) || (null !== $category) || (null !== $date)) {
+    if ((null !== $category) || (null !== $date)) {
 ?>
         <p class="text-white-50">
 <?php
