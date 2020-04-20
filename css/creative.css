@@ -9630,6 +9630,55 @@ hr.light {
 #mainNav .navbar-nav .nav-item .nav-link.active {
   color: #1B7340 !important;
 }
+
+/* Ugly responive hacks */
+@media (max-width: 1199px) {
+ 
+#mainNav .navbar-nav .nav-item .nav-link {
+  font-size: 0.78rem;
+} 
+
+.container{
+  padding-right: 0px; 
+  padding-left: 0px;
+}
+
+}
+
+@media (min-width: 992px) {
+ 
+#main_text{
+  margin-top:-2.7rem;
+}
+
+#main_divider{
+  margin-top:-0.1rem;
+}
+
+#main_logo{
+  margin-top:-1rem;
+}
+
+}
+
+@media (max-width: 991px) {
+ 
+#mainNav .navbar-nav .nav-item .nav-link {
+  font-size: 0.9rem;
+} 
+
+#main_logo{
+  padding-bottom: 1rem;
+  margin-top: -2rem;
+}
+
+.container{
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+}
+/* Ugly responive hacks end */
   
 @media (min-width: 992px) {
   #mainNav {
