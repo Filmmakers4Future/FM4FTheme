@@ -9621,6 +9621,7 @@ hr.light {
   font-weight: 700;
   font-size: 0.9rem;
   padding: 0.75rem 0;
+  outline:none;
 }
 
 #mainNav .navbar-nav .nav-item .nav-link:hover, #mainNav .navbar-nav .nav-item .nav-link:active {
@@ -9631,6 +9632,9 @@ hr.light {
   color: #1B7340 !important;
 }
 
+#mainNav .navbar-nav .nav-item .nav-link:focus {
+  color: #fff;
+}
 /* Ugly responive hacks */
 @media (max-width: 1199px) {
  
@@ -9677,6 +9681,13 @@ hr.light {
   padding-left: 15px;
 }
 
+#mainNav .navbar-nav .nav-item .dropdown-menu {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+#mainNav .navbar-nav .nav-item .nav-link:focus {
+  color: #1DA64A;
+}
 }
 /* Ugly responive hacks end */
   
@@ -9714,9 +9725,22 @@ hr.light {
   #mainNav.navbar-scrolled .navbar-nav .nav-item .nav-link {
     color: #212529;
   }
-  #mainNav.navbar-scrolled .navbar-nav .nav-item .nav-link:hover {
+  #mainNav.navbar-scrolled .navbar-nav .nav-item .nav-link:hover, #mainNav.navbar-scrolled .navbar-nav .nav-item .nav-link:focus {
     color: #1DA64A;
   }
+  #mainNav:not(.navbar-scrolled) .navbar-nav .nav-item .dropdown-menu {
+    margin-top: 1rem;
+  }
+  .animate {
+      animation-duration: 0.3s;
+      -webkit-animation-duration: 0.3s;
+      animation-fill-mode: both;
+      -webkit-animation-fill-mode: both;
+    }
+   .dropdown-menu{
+    -webkit-box-shadow: 21px 28px 45px -22px rgba(0,0,0,0.25);
+    box-shadow: 21px 28px 45px -22px rgba(0,0,0,0.25);
+  } 
 }
 
 header.masthead {
@@ -9846,4 +9870,39 @@ header .overlay {
 
 .hidden {
   display:none
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(-1rem);
+    opacity: 0;
+  }
+  100% {
+    transform:translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(-1rem);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes slideIn {
+  0% {
+    -webkit-transform: translateY(-1rem);
+    -webkit-opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -webkit-opacity: 1;
+  }
+  0% {
+    -webkit-transform: translateY(-1rem);
+    -webkit-opacity: 0;
+  }
+}
+
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
 }
