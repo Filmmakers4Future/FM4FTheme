@@ -22,7 +22,8 @@
 
     protected static function configureTheme() {
       // individual theme configuration
-      Themes::preset("copyright_html", null);
+      Themes::preset("alternate_alignment", static::getDefaultAlternateAlignment());
+      Themes::preset("copyright_html",      null);
 
       // static theme configuration
       Themes::preset(FAVICON,     null);
@@ -43,6 +44,45 @@
       Themes::preset(LANGUAGE,    static::getDefaultLanguage());
       Themes::preset(PAGENAME,    static::getDefaultPagename());
       Themes::preset(TITLE,       static::getDefaultTitle());
+    }
+
+    protected static function getDefaultAlternateAlignment() {
+      $result = false;
+
+      $metadata = value(Main::class, METADATA);
+      if ($metadata instanceof Content) {
+        switch (Handlers::getActive()) {
+          case CategoryHandler::class:
+            callcontent(strtolower(value($metadata, CATEGORY)), false, true,
+                        function ($content) use (&$result) {
+                          if (false === $result) {
+                            $result = istrue(value($content, "AlternateAlignment"));
+                          }
+                          return null;
+                        });
+            break;
+
+          case PageHandler::class:
+            $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
+            if (null !== $content) {
+              $category = static::getFirstCategory(value($content[0], CATEGORY));
+              if (null !== $category) {
+                callcontent(strtolower($category), false, true,
+                            function ($content) use (&$result) {
+                              if (false === $result) {
+                                $result = istrue(value($content, "AlternateAlignment"));
+                              }
+                              return null;
+                            });
+              }
+            } else {
+              $result = istrue(value(value(Main::class, CONTENT)[0], "AlternateAlignment"));
+            }
+            break;
+        }
+      }
+
+      return $result;
     }
 
     protected static function getDefaultAuthor() {

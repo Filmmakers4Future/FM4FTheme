@@ -90,7 +90,7 @@
     }
 ?>
     <!-- <?= html($title) ?> Section -->
-    <section class="page-section <?= (0 === ($index % 2)) ? "bg-primary" : "bg-dark" ?> text-left">
+    <section class="page-section <?= (0 === ($index % 2)) ? "bg-primary" : "bg-dark" ?> <?= (value(Themes::class, "alternate_alignment") && (0 === ($index % 2))) ? "text-right" : "text-left" ?>">
       <div class="container">
 <?php
     if (null !== $title) {

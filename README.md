@@ -12,6 +12,12 @@ Main::set(THEMENAME, FM4FTheme::class);
 ## Configuration
 To configure the theme you can change the corresponding settings in your configuration file located at `./user/config/config.php`.
 
+### Alternate Alignment
+You can set the following value so that the alignment of sections is alternated:
+```
+Themes::set("alternate_alignment", static::getDefaultAlternateAlignment());
+```
+
 ### Author name
 You can overwrite the auto-generated author header:
 ```
@@ -127,8 +133,8 @@ Themes::set(TITLE, static::getDefaultTitle());
 
 ### Special Category Handling
 
-The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the `PAGENAME`, `DESCRIPTION` and `DATE` fields are used to set the corresponding header values. Furthermore, the content of that content file is used in the header as well.
+The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the `PAGENAME`, `DESCRIPTION`, `DATE` and `ALTERNATEALIGNMENT` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well.
 
 ### Special Page Handling
 
-The implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the `PAGENAME`, `DESCRIPTION` and `DATE` fields are used to set the corresponding header values. Furthermore, the content of that content file is used in the header as well. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the page. The sections will be sorted by filename.
+The implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the `PAGENAME`, `DESCRIPTION`, `DATE` and `ALTERNATEALIGNMENT` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the page. The sections will be sorted by filename.
