@@ -23,6 +23,14 @@
         <h6 class="text-white-50 mt-0 text-center">(Last update: <?= html(value(Themes::class, DATE)) ?>)</h6>
 <?php
   }
+  if (null !== value(Themes::class, CONTENT)) {
+?>
+        <br>
+        <h6 class="text-white-50 text-center">
+<?= value(Themes::class, CONTENT).NL ?>
+        </h6>
+<?php
+  }
 ?>
       </div>
     </section>
@@ -84,17 +92,20 @@
     <!-- <?= html($title) ?> Section -->
     <section class="page-section <?= (0 === ($index % 2)) ? "bg-primary" : "bg-dark" ?> text-left">
       <div class="container">
+<?php
+    if (null !== $title) {
+?>
         <h3 class="text-white-75">
 <?php
-    if (null !== $uri) {
+      if (null !== $uri) {
 ?>
           <a href="<?= html($uri) ?>">
 <?php
-    }
+      }
 ?>
             <?= html($title.NL) ?>
 <?php
-    if (null !== $uri) {
+      if (null !== $uri) {
 ?>
           </a>
 <?php
@@ -102,6 +113,7 @@
 ?>
         </h3>
 <?php
+    }
     if ((null !== $category) || (null !== $date)) {
 ?>
         <p class="text-white-50">

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1a3 (21.04.2020)
+### Feature
+* added support for pages with section
+
 ## 0.1a2 (21.04.2020)
 ### Feature
 * added support for submenus

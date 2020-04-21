@@ -23,22 +23,25 @@
     protected static function configureTheme() {
       // individual theme configuration
       Themes::preset("copyright_html", null);
-      Themes::preset(DATE,             static::getDefaultDate());
+
+      // static theme configuration
+      Themes::preset(FAVICON,     null);
+      Themes::preset(MENU,        null);
+      Themes::preset(SITENAME,    "Filmmakers for Future");
+      Themes::preset(SITESLOGAN,  null);
+      Themes::preset(TIMEFORMAT,  "d F Y");
 
       // recommended theme configuration
       Themes::preset(AUTHOR,      static::getDefaultAuthor());
       Themes::preset(CANONICAL,   static::getDefaultCanonical());
       Themes::preset(CHARSET,     static::getDefaultCharset());
+      Themes::preset(CONTENT,     static::getDefaultContent());
       Themes::preset(COPYRIGHT,   static::getDefaultCopyright());
+      Themes::preset(DATE,        static::getDefaultDate());
       Themes::preset(DESCRIPTION, static::getDefaultDescription());
-      Themes::preset(FAVICON,     null);
       Themes::preset(KEYWORDS,    static::getDefaultKeywords());
       Themes::preset(LANGUAGE,    static::getDefaultLanguage());
-      Themes::preset(MENU,        null);
       Themes::preset(PAGENAME,    static::getDefaultPagename());
-      Themes::preset(SITENAME,    t("Deine Webseite", static::class));
-      Themes::preset(SITESLOGAN,  t("Dein Slogan", static::class));
-      Themes::preset(TIMEFORMAT,  "d.m.Y");
       Themes::preset(TITLE,       static::getDefaultTitle());
     }
 
@@ -69,6 +72,45 @@
 
     protected static function getDefaultCharset() {
       return strtolower(value(Main::class, CHARSET));
+    }
+
+    protected static function getDefaultContent() {
+      $result = null;
+
+      $metadata = value(Main::class, METADATA);
+      if ($metadata instanceof Content) {
+        switch (Handlers::getActive()) {
+          case CategoryHandler::class:
+            callcontent(strtolower(value($metadata, CATEGORY)), false, true,
+                        function ($content) use (&$result) {
+                          if (null === $result) {
+                            $result = value($content, CONTENT);
+                          }
+                          return null;
+                        });
+            break;
+
+          case PageHandler::class:
+            $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
+            if (null !== $content) {
+              $category = static::getFirstCategory(value($content[0], CATEGORY));
+              if (null !== $category) {
+                callcontent(strtolower($category), false, true,
+                            function ($content) use (&$result) {
+                              if (null === $result) {
+                                $result = value($content, CONTENT);
+                              }
+                              return null;
+                            });
+              }
+            } else {
+              $result = value(value(Main::class, CONTENT)[0], CONTENT);
+            }
+            break;
+        }
+      }
+
+      return $result;
     }
 
     protected static function getDefaultCopyright() {
@@ -106,6 +148,8 @@
                             return null;
                           });
             }
+          } else {
+            $date = strtotime(value(value(Main::class, CONTENT)[0], DATE));
           }
           break;
       }
@@ -156,6 +200,8 @@
                               return null;
                             });
               }
+            } else {
+              $result = value(value(Main::class, CONTENT)[0], DESCRIPTION);
             }
             break;
         }
@@ -261,6 +307,8 @@
                   $result = t("Kategorie", FM4FTheme::class).COL.SP.strtoupper($category);
                 }
               }
+            } else {
+              $result = value(value(Main::class, CONTENT)[0], PAGENAME);
             }
             break;
 
@@ -274,8 +322,14 @@
     }
 
     protected static function getDefaultTitle() {
-      $result = value(Themes::class, SITENAME).SP."-".SP.value(Themes::class, SITESLOGAN);
+      $result = value(Themes::class, SITENAME);
 
+      // optionally add the siteslogan if it is set
+      if (null !== value(Themes::class, SITESLOGAN)) {
+        $result = $result.SP."-".SP.value(Themes::class, SITESLOGAN);
+      }
+
+      // optionally add the pagename if it is set
       if (null !== value(Themes::class, PAGENAME)) {
         $result = value(Themes::class, PAGENAME).SP."|".SP.$result;
       } else {
@@ -310,6 +364,36 @@
       return $result;
     }
 
+    protected static function handlePageSections() {
+      // only check if we show a single page
+      if (PageHandler::class === Handlers::getActive()) {
+        // extract the potential folder name
+        $filename = basename(value(value(Main::class, CONTENT)[0], FilePlugin::FILE), FilePlugin::EXTENSION);
+
+        // retrieve the sections
+        $content = callcontent($filename, true, false,
+                               function ($content) {
+                                 // ignore files where "section" is not set to true
+                                 if (istrue(value($content, "section"))) {
+                                   return $content;
+                                 } else {
+                                   return null;
+                                 }
+                               });
+
+        // if there is something left
+        if (null !== $content) {
+          // make sure that we set an array
+          if ($content instanceof Content) {
+            $content = [$content];
+          }
+
+          // set the sections as the new content
+          Main::set(CONTENT, $content);
+        }
+      }
+    }
+
     // RUNTIME FUNCTIONS
 
     public static function theme() {
@@ -325,6 +409,9 @@
 
         // preset theme configuration
         static::configureTheme();
+
+        // read page sections if they are available
+        static::handlePageSections();
 
         // generate the head output
         Plugins::run(BEFORE_HEAD);

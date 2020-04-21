@@ -1,7 +1,19 @@
-.container p,
-.container ol li,
-.container ul li {
-  color: #ffffff;
+.page-section .container h2 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.page-section .container h4 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.page-section .container h5 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.page-section .container p,
+.page-section .container ol li,
+.page-section .container ul li {
+  color: #ffffff !important;
 }
 
 .podcastaudio {
