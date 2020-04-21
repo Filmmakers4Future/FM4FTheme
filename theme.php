@@ -6,7 +6,7 @@
     This file contains the theme class of the Filmmakers for Future theme.
 
     @package filmmakers4future\fm4ftheme
-    @version 0.1a1
+    @version 0.1a2
     @author  Yahe <hello@yahe.sh>
     @since   0.1a0
   */

@@ -91,9 +91,28 @@
     foreach ($menu as $menu_item) {
       if (is_array($menu_item)) {
         if (isset($menu_item[TITLE]) && isset($menu_item[URI])) {
+          if (isset($menu_item[MENU]) && is_array($menu_item[MENU])) {
+?>
+            <li class="dropdown nav-item">
+              <a href="<?= html($menu_item[URI]) ?>" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><?= html($menu_item[TITLE]) ?></a>
+              <div class="dropdown-menu dropdown-menu-left animate slideIn" aria-labelledby="navbarDropdown">
+<?php
+            foreach ($menu_item[MENU] as $submenu_item) {
+              if (isset($submenu_item[TITLE]) && isset($submenu_item[URI])) {
+?>
+                <a class="dropdown-item" href="<?= html($submenu_item[URI]) ?>"><?= html($submenu_item[TITLE]) ?></a>
+<?php
+              }
+            }
+?>
+              </div>
+            </li>
+<?php
+          } else {
 ?>
             <li class="nav-item"><a class="nav-link" href="<?= html($menu_item[URI]) ?>"><?= html($menu_item[TITLE]) ?></a></li>
 <?php
+          }
         }
       }
     }
