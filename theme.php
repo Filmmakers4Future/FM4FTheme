@@ -189,7 +189,9 @@
                           });
             }
           } else {
-            $date = strtotime(value(value(Main::class, CONTENT)[0], DATE));
+            if (null !== value(value(Main::class, CONTENT)[0], DATE)) {
+              $date = strtotime(value(value(Main::class, CONTENT)[0], DATE));
+            }
           }
           break;
       }
