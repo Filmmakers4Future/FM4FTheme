@@ -12,12 +12,6 @@ Main::set(THEMENAME, FM4FTheme::class);
 ## Configuration
 To configure the theme you can change the corresponding settings in your configuration file located at `./user/config/config.php`.
 
-### Alternate Alignment
-You can set the following value so that the alignment of sections is alternated:
-```
-Themes::set("alternate_alignment", static::getDefaultAlternateAlignment());
-```
-
 ### Author name
 You can overwrite the auto-generated author header:
 ```
@@ -36,11 +30,19 @@ You can overwrite the auto-generated charset header:
 Themes::set(CHARSET, static::getDefaultCharset());
 ```
 
-### Description
+### Content
 You can add HTML content to the header:
 ```
-Themes::set(CONTENT, null);
+Themes::set(CONTENT, static::getDefaultAttribute(CONTENT));
 ```
+
+### Date
+You can overwrite the auto-generated date information:
+```
+Themes::set(DATE, static::getDefaultAttribute(DATE));
+```
+
+Set this value to `none` if you want to hide the date information in the header.
 
 ### Copyright text
 You can set the following values to change the copyright text in the footer area. You can either choose auto-escaped text by setting `COPYRIGHT` or you can choose HTML by setting `"copyright_html"`:
@@ -54,7 +56,7 @@ Themes::set("copyright_html", null);
 ### Description
 You can overwrite the auto-generated description header:
 ```
-Themes::set(DESCRIPTION, static::getDefaultDescription());
+Themes::set(DESCRIPTION, static::getDefaultAttribute(DESCRIPTION));
 ```
 
 ### Favicon URL
@@ -66,7 +68,7 @@ Themes::set(FAVICON, null);
 ### Keywords
 You can overwrite the auto-generated keywords header:
 ```
-Themes::set(KEYWORDS, static::getDefaultKeywords());
+Themes::set(KEYWORDS, static::getDefaultAttribute(KEYWORDS));
 ```
 
 ### Language
@@ -103,6 +105,35 @@ You can overwrite the auto-generated page name that is used as an H1 headline:
 Themes::set(PAGENAME, static::getDefaultPagename());
 ```
 
+### Replace Heading
+You can set the following value to define that the default heading shall be completely replaced with the content:
+```
+Themes::set("replace_heading", static::getDefaultAttribute("ReplaceHeading"));
+```
+
+### Section Alignment
+You can set the following value to define the alignment of sections:
+```
+Themes::set("section_alignment", static::getDefaultAttribute("SectionAlignment"));
+```
+
+Valid values are:
+* `alternate`
+* `center`
+* `left`
+* `right`
+
+### Section Background
+You can set the following value to define the background color of sections:
+```
+Themes::set("section_background", static::getDefaultAttribute("SectionBackground"));
+```
+
+Valid values are:
+* `alternate`
+* `dark`
+* `primary`
+
 ### Sitename
 You can overwrite the preset site name that is used a text logo and in the auto-generated title header:
 ```
@@ -133,8 +164,8 @@ Themes::set(TITLE, static::getDefaultTitle());
 
 ### Special Category Handling
 
-The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the `PAGENAME`, `DESCRIPTION`, `DATE` and `ALTERNATEALIGNMENT` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well.
+The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the `PAGENAME`, `DESCRIPTION`, `DATE`, `SECTIONALIGNMENT` and `SECTIONBACKGROUND` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well which can be completely overwritten by setting `REPLACEHEADING` to `true`.
 
 ### Special Page Handling
 
-The implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the `PAGENAME`, `DESCRIPTION`, `DATE` and `ALTERNATEALIGNMENT` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the page. The sections will be sorted by filename.
+The implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the `PAGENAME`, `DESCRIPTION`, `DATE`, `SECTIONALIGNMENT` and `SECTIONBACKGROUND` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well which can be completely overwritten by setting `REPLACEHEADING` to `true`. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the page. The sections will be sorted by filename.

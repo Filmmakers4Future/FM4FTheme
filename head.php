@@ -20,7 +20,7 @@
   }
 ?>
     <meta property="og:description" content="<?= html(value(Themes::class, DESCRIPTION)) ?>">
-    <meta property="og:image" content="<?= html(absoluteurl(path2uri(__DIR__."/img/preview.jpg"))) ?>">
+    <meta property="og:image" content="<?= html(absoluteurl("/user/uploads/img/preview.jpg")) ?>">
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= html(value(Themes::class, TITLE)) ?>">
 <?php
@@ -58,10 +58,10 @@
     <title><?= html(value(Themes::class, TITLE)) ?></title>
 
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="<?= html(path2uri(__DIR__."/img/app_icon.png")) ?>">
+    <link rel="apple-touch-icon" href="/user/uploads/img/app_icon.png">
 
     <!-- Fork Awesome Icons -->
-    <link href="<?= html(path2uri(__DIR__."/vendor/fork-awesome/css/fork-awesome.min.css")) ?>" rel="stylesheet" type="text/css">
+    <link href="<?= html(path2uri(__DIR__."/vendor/fork-awesome/css/fork-awesome.min.css")) ?>" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="<?= html(path2uri(__DIR__."/css/custom.css")) ?>" rel="stylesheet">
@@ -99,8 +99,20 @@
 <?php
             foreach ($menu_item[MENU] as $submenu_item) {
               if (isset($submenu_item[TITLE]) && isset($submenu_item[URI])) {
+                // handle local scrolling links
+                $local = false;
+                if (null !== value(Main::class, URI)) {
+                  $url = parse_url($submenu_item[URI]);
+                  if ((false !== $url) &&
+                      !isset($url["scheme"]) && !isset($url["host"]) && !isset($url["port"]) && !isset($url["user"]) &&
+                      !isset($url["pass"]) && isset($url["path"]) && isset($url["fragment"]) &&
+                      (0 === strcmp(value(Main::class, URI), $url["path"]))) {
+                    $local             = true;
+                    $submenu_item[URI] = "#".$url["fragment"];
+                  }
+                }
 ?>
-                <a class="dropdown-item" href="<?= html($submenu_item[URI]) ?>"><?= html($submenu_item[TITLE]) ?></a>
+                <a class="dropdown-item<?= ($local) ? " js-scroll-trigger" : "" ?>" href="<?= html($submenu_item[URI]) ?>"><?= html($submenu_item[TITLE]) ?></a>
 <?php
               }
             }
@@ -109,8 +121,20 @@
             </li>
 <?php
           } else {
+            // handle local scrolling links
+            $local = false;
+            if (null !== value(Main::class, URI)) {
+              $url = parse_url($menu_item[URI]);
+              if ((false !== $url) &&
+                  !isset($url["scheme"]) && !isset($url["host"]) && !isset($url["port"]) && !isset($url["user"]) &&
+                  !isset($url["pass"]) && isset($url["path"]) && isset($url["fragment"]) &&
+                  (0 === strcmp(value(Main::class, URI), $url["path"]))) {
+                $local          = true;
+                $menu_item[URI] = "#".$url["fragment"];
+              }
+            }
 ?>
-            <li class="nav-item"><a class="nav-link" href="<?= html($menu_item[URI]) ?>"><?= html($menu_item[TITLE]) ?></a></li>
+            <li class="nav-item"><a class="nav-link<?= ($local) ? " js-scroll-trigger" : "" ?>" href="<?= html($menu_item[URI]) ?>"><?= html($menu_item[TITLE]) ?></a></li>
 <?php
           }
         }

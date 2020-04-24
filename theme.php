@@ -6,7 +6,7 @@
     This file contains the theme class of the Filmmakers for Future theme.
 
     @package filmmakers4future\fm4ftheme
-    @version 0.1a2
+    @version 0.1a4
     @author  Yahe <hello@yahe.sh>
     @since   0.1a0
   */
@@ -22,64 +22,153 @@
 
     protected static function configureTheme() {
       // individual theme configuration
-      Themes::preset("alternate_alignment", static::getDefaultAlternateAlignment());
-      Themes::preset("copyright_html",      null);
+      Themes::preset("copyright_html",     null);
+      Themes::preset("replace_heading",    static::getDefaultAttribute("ReplaceHeading",
+                                                                       function ($result) {
+                                                                         return istrue($result);
+                                                                       }));
+      Themes::preset("section_alignment",  static::getDefaultAttribute("SectionAlignment",
+                                                                       function ($result) {
+                                                                         // only allow supported values
+                                                                         switch (strtolower($result)) {
+                                                                           case "alternate":
+                                                                           case "center":
+                                                                           case "left":
+                                                                           case "right":
+                                                                             break;
+                                                                           default:
+                                                                             $result = null;
+                                                                         }
+                                                                         return $result;
+                                                                       }));
+      Themes::preset("section_background", static::getDefaultAttribute("SectionBackground",
+                                                                       function ($result) {
+                                                                         // only allow supported values
+                                                                         switch (strtolower($result)) {
+                                                                           case "alternate":
+                                                                           case "dark":
+                                                                           case "primary":
+                                                                             break;
+                                                                           default:
+                                                                             $result = null;
+                                                                         }
+                                                                         return $result;
+                                                                       }));
 
       // static theme configuration
-      Themes::preset(FAVICON,     null);
-      Themes::preset(MENU,        null);
-      Themes::preset(SITENAME,    "Filmmakers for Future");
-      Themes::preset(SITESLOGAN,  null);
-      Themes::preset(TIMEFORMAT,  "d F Y");
+      Themes::preset(FAVICON,    null);
+      Themes::preset(MENU,       null);
+      Themes::preset(SITENAME,   "Filmmakers for Future");
+      Themes::preset(SITESLOGAN, null);
+      Themes::preset(TIMEFORMAT, "d F Y");
 
       // recommended theme configuration
       Themes::preset(AUTHOR,      static::getDefaultAuthor());
       Themes::preset(CANONICAL,   static::getDefaultCanonical());
       Themes::preset(CHARSET,     static::getDefaultCharset());
-      Themes::preset(CONTENT,     static::getDefaultContent());
+      Themes::preset(CONTENT,     static::getDefaultAttribute(CONTENT, null));
       Themes::preset(COPYRIGHT,   static::getDefaultCopyright());
-      Themes::preset(DATE,        static::getDefaultDate());
-      Themes::preset(DESCRIPTION, static::getDefaultDescription());
-      Themes::preset(KEYWORDS,    static::getDefaultKeywords());
+      Themes::preset(DATE,        static::getDefaultAttribute(DATE,
+                                                              function ($result) {
+                                                                // alternative retrieve file modification date of the
+                                                                // first content object
+                                                                if (null === $result) {
+                                                                  $content = preparecontent(value(Main::class, CONTENT),
+                                                                                            null, [FilePlugin::FILE]);
+                                                                  if (null !== $content) {
+                                                                    if (is_file(value($content[0], FilePlugin::FILE))) {
+                                                                      $result = filemtime(value($content[0],
+                                                                                                FilePlugin::FILE));
+                                                                    }
+                                                                  }
+                                                                } else {
+                                                                  if (0 !== strcasecmp($result, "none")) {
+                                                                    // convert retrieved secret to a date
+                                                                    $result = strtotime($result);
+                                                                  } else {
+                                                                    $result = null;
+                                                                  }
+                                                                }
+                                                                if (null !== $result) {
+                                                                  $result = date(value(Themes::class, TIMEFORMAT), $result);
+                                                                }
+                                                                return $result;
+                                                              }));
+      Themes::preset(DESCRIPTION, static::getDefaultAttribute(DESCRIPTION, null));
+      Themes::preset(KEYWORDS,    static::getDefaultAttribute(KEYWORDS,
+                                                              function ($result) {
+                                                                if (null === $result) {
+                                                                  // retrieve all words from the titles and pagenames
+                                                                  $words = [];
+                                                                  foreach (value(Main::class, CONTENT) as $content_item) {
+                                                                    if ($content_item->isset(PAGENAME)) {
+                                                                      $words = array_merge($words,
+                                                                                           explode(SP, value($content_item,
+                                                                                                             PAGENAME)));
+                                                                    }
+                                                                    if ($content_item->isset(TITLE)) {
+                                                                      $words = array_merge($words,
+                                                                                           explode(SP, value($content_item,
+                                                                                                             TITLE)));
+                                                                    }
+                                                                  }
+                                                                  // filter all words that do not fit the scheme
+                                                                  for ($index = count($words)-1; $index >= 0; $index--) {
+                                                                    if (1 !== preg_match("~^[0-9A-Za-z\-]+$~", $words[$index])) {
+                                                                      unset($words[$index]);
+                                                                    }
+                                                                  }
+                                                                  $result = implode(DP.SP, $words);
+                                                                }
+                                                                return $result;
+                                                              }));
       Themes::preset(LANGUAGE,    static::getDefaultLanguage());
       Themes::preset(PAGENAME,    static::getDefaultPagename());
       Themes::preset(TITLE,       static::getDefaultTitle());
     }
 
-    protected static function getDefaultAlternateAlignment() {
-      $result = false;
+    protected static function getDefaultAttribute($attribute, $filter = null) {
+      $result = null;
 
       $metadata = value(Main::class, METADATA);
       if ($metadata instanceof Content) {
         switch (Handlers::getActive()) {
           case CategoryHandler::class:
             callcontent(strtolower(value($metadata, CATEGORY)), false, true,
-                        function ($content) use (&$result) {
-                          if (false === $result) {
-                            $result = istrue(value($content, "AlternateAlignment"));
+                        function ($content) use ($attribute, &$result) {
+                          if ((null === $result) && (null !== value($content, $attribute))) {
+                            $result = value($content, $attribute);
                           }
                           return null;
                         });
             break;
 
+          case FM4FHandler::class:
           case PageHandler::class:
             $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
             if (null !== $content) {
               $category = static::getFirstCategory(value($content[0], CATEGORY));
               if (null !== $category) {
                 callcontent(strtolower($category), false, true,
-                            function ($content) use (&$result) {
-                              if (false === $result) {
-                                $result = istrue(value($content, "AlternateAlignment"));
+                            function ($content) use ($attribute, &$result) {
+                              if ((null === $result) && (null !== value($content, $attribute))) {
+                                $result = value($content, $attribute);
                               }
                               return null;
                             });
               }
             } else {
-              $result = istrue(value(value(Main::class, CONTENT)[0], "AlternateAlignment"));
+              if (null !== value(value(Main::class, CONTENT)[0], $attribute)) {
+                $result = value(value(Main::class, CONTENT)[0], $attribute);
+              }
             }
             break;
         }
+      }
+
+      // let the caller decide what happens with the result
+      if (is_callable($filter)) {
+        $result = $filter($result);
       }
 
       return $result;
@@ -114,165 +203,8 @@
       return strtolower(value(Main::class, CHARSET));
     }
 
-    protected static function getDefaultContent() {
-      $result = null;
-
-      $metadata = value(Main::class, METADATA);
-      if ($metadata instanceof Content) {
-        switch (Handlers::getActive()) {
-          case CategoryHandler::class:
-            callcontent(strtolower(value($metadata, CATEGORY)), false, true,
-                        function ($content) use (&$result) {
-                          if (null === $result) {
-                            $result = value($content, CONTENT);
-                          }
-                          return null;
-                        });
-            break;
-
-          case PageHandler::class:
-            $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
-            if (null !== $content) {
-              $category = static::getFirstCategory(value($content[0], CATEGORY));
-              if (null !== $category) {
-                callcontent(strtolower($category), false, true,
-                            function ($content) use (&$result) {
-                              if (null === $result) {
-                                $result = value($content, CONTENT);
-                              }
-                              return null;
-                            });
-              }
-            } else {
-              $result = value(value(Main::class, CONTENT)[0], CONTENT);
-            }
-            break;
-        }
-      }
-
-      return $result;
-    }
-
     protected static function getDefaultCopyright() {
       return "Copyright &copy;".SP.value(Themes::class, SITENAME).SP.date("Y");
-    }
-
-    protected static function getDefaultDate() {
-      $result = null;
-
-      $date = null;
-      switch (Handlers::getActive()) {
-        case CategoryHandler::class:
-          $metadata = value(Main::class, METADATA);
-          if ($metadata instanceof Content) {
-            callcontent(strtolower(value($metadata, CATEGORY)), false, true,
-                        function ($content) use (&$date) {
-                          if ((null === $date) && (null !== value($content, DATE))) {
-                            $date = strtotime(value($content, DATE));
-                          }
-                          return null;
-                        });
-          }
-          break;
-
-        case PageHandler::class:
-          $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
-          if (null !== $content) {
-            $category = static::getFirstCategory(value($content[0], CATEGORY));
-            if (null !== $category) {
-              callcontent(strtolower($category), false, true,
-                          function ($content) use (&$date) {
-                            if ((null === $date) && (null !== value($content, DATE))) {
-                              $date = strtotime(value($content, DATE));
-                            }
-                            return null;
-                          });
-            }
-          } else {
-            if (null !== value(value(Main::class, CONTENT)[0], DATE)) {
-              $date = strtotime(value(value(Main::class, CONTENT)[0], DATE));
-            }
-          }
-          break;
-      }
-
-      // alternative retrieve file modification date of the first content object
-      if (null === $date) {
-        $content = preparecontent(value(Main::class, CONTENT), null, [FilePlugin::FILE]);
-        if (null !== $content) {
-          if (is_file(value($content[0], FilePlugin::FILE))) {
-            $date = filemtime(value($content[0], FilePlugin::FILE));
-          }
-        }
-      }
-
-      if (null !== $date) {
-        $result = date(value(Themes::class, TIMEFORMAT), $date);
-      }
-
-      return $result;
-    }
-
-    protected static function getDefaultDescription() {
-      $result = null;
-
-      $metadata = value(Main::class, METADATA);
-      if ($metadata instanceof Content) {
-        switch (Handlers::getActive()) {
-          case CategoryHandler::class:
-            callcontent(strtolower(value($metadata, CATEGORY)), false, true,
-                        function ($content) use (&$result) {
-                          if (null === $result) {
-                            $result = value($content, DESCRIPTION);
-                          }
-                          return null;
-                        });
-            break;
-
-          case PageHandler::class:
-            $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
-            if (null !== $content) {
-              $category = static::getFirstCategory(value($content[0], CATEGORY));
-              if (null !== $category) {
-                callcontent(strtolower($category), false, true,
-                            function ($content) use (&$result) {
-                              if (null === $result) {
-                                $result = value($content, DESCRIPTION);
-                              }
-                              return null;
-                            });
-              }
-            } else {
-              $result = value(value(Main::class, CONTENT)[0], DESCRIPTION);
-            }
-            break;
-        }
-      }
-
-      return $result;
-    }
-
-    protected static function getDefaultKeywords() {
-      $result = null;
-
-      // retrieve all words from the titles
-      $words = [];
-      foreach (value(Main::class, CONTENT) as $content_item) {
-        if ($content_item->isset(TITLE)) {
-          $words = array_merge($words, explode(SP, value($content_item, TITLE)));
-        }
-      }
-
-      // filter all words that do not fit the scheme
-      for ($index = count($words)-1; $index >= 0; $index--) {
-        if (1 !== preg_match("~^[0-9A-Za-z\-]+$~", $words[$index])) {
-          unset($words[$index]);
-        }
-      }
-
-      $result = implode(DP.SP, $words);
-
-      return $result;
     }
 
     protected static function getDefaultLanguage() {
@@ -333,6 +265,7 @@
             }
             break;
 
+          case FM4FHandler::class:
           case PageHandler::class:
             $content = preparecontent(value(Main::class, CONTENT), null, [CATEGORY]);
             if (null !== $content) {
@@ -407,8 +340,9 @@
     }
 
     protected static function handlePageSections() {
-      // only check if we show a single page
-      if (PageHandler::class === Handlers::getActive()) {
+      // only check if we show a single page or the index
+      if ((FM4FHandler::class === Handlers::getActive()) ||
+          (PageHandler::class === Handlers::getActive())) {
         // extract the potential folder name
         $filename = basename(value(value(Main::class, CONTENT)[0], FilePlugin::FILE), FilePlugin::EXTENSION);
 

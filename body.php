@@ -3,37 +3,43 @@
   // prevent script from getting called directly
   if (!defined("URLAUBE")) { die(""); }
 
+  if (value(Themes::class, "replace_heading") && (null !== value(Themes::class, CONTENT))) {
+    print(value(Themes::class, CONTENT).NL);
+  } else {
 ?>
     <!-- Header Section -->
     <section class="header-section bg-primary">
       <div class="container">
 <?php
-  if (null !== value(Themes::class, PAGENAME)) {
+    if (null !== value(Themes::class, PAGENAME)) {
 ?>
         <h2 class="text-center text-white mt-0"><?= html(value(Themes::class, PAGENAME)) ?></h2>
 <?php
-  }
-  if (null !== value(Themes::class, DESCRIPTION)) {
+    }
+    if (null !== value(Themes::class, DESCRIPTION)) {
 ?>
         <h5 class="text-white mt-0 text-center"><?= html(value(Themes::class, DESCRIPTION)) ?></h5>
 <?php
-  }
-  if (null !== value(Themes::class, DATE)) {
+    }
+    if (null !== value(Themes::class, DATE)) {
 ?>
         <h6 class="text-white-50 mt-0 text-center">(Last update: <?= html(value(Themes::class, DATE)) ?>)</h6>
 <?php
-  }
-  if (null !== value(Themes::class, CONTENT)) {
+    }
+    if (null !== value(Themes::class, CONTENT)) {
 ?>
         <br>
         <h6 class="text-white-50 text-center">
 <?= value(Themes::class, CONTENT).NL ?>
         </h6>
 <?php
-  }
+    }
 ?>
       </div>
     </section>
+<?php
+  }
+?>
 
 <?php
   // iterate through the content entries
@@ -88,9 +94,62 @@
         (PageHandler::class !== Handlers::getActive())) {
       $uri = value($content_item, URI);
     }
+
+    $alignment = "text-left";
+    if ((null !== value(Themes::class, "section_alignment")) ||
+        (null !== value($content_item, "SectionAlignment"))) {
+      // get specific value or general value
+      $temp = value($content_item, "SectionAlignment");
+      if (null === $temp) {
+        $temp = value(Themes::class, "section_alignment");
+      }
+
+      switch (strtolower($temp)) {
+        case "alternate":
+          $alignment = (0 === ($index % 2)) ? "text-right" : "text-left";
+          break;
+
+        case "center":
+          $alignment = "text-center";
+          break;
+
+        case "left":
+          $alignment = "text-left";
+          break;
+
+        case "right":
+          $alignment = "text-right";
+          break;
+      }
+    }
+
+
+    $background = "bg-primary";
+    if ((null !== value(Themes::class, "section_background")) ||
+        (null !== value($content_item, "SectionBackground"))) {
+      // get specific value or general value
+      $temp = value($content_item, "SectionBackground");
+      if (null === $temp) {
+        $temp = value(Themes::class, "section_background");
+      }
+
+      switch (strtolower($temp)) {
+        case "alternate":
+          $background = (0 === ($index % 2)) ? "bg-primary" : "bg-dark";
+          break;
+
+        case "dark":
+          $background = "bg-dark";
+          break;
+
+        case "primary":
+          $background = "bg-primary";
+          break;
+      }
+    }
 ?>
     <!-- <?= html($title) ?> Section -->
-    <section class="page-section <?= (0 === ($index % 2)) ? "bg-primary" : "bg-dark" ?> <?= (value(Themes::class, "alternate_alignment") && (0 === ($index % 2))) ? "text-right" : "text-left" ?>">
+    <section class="page-section <?= html($background).SP.html($alignment) ?>"<?= (null !== value($content_item, "SectionId")) ? "id=\"".value($content_item, "SectionId")."\"" : "" ?>>
       <div class="container">
 <?php
     if (null !== $title) {

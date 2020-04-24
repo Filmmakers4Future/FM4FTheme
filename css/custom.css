@@ -1,20 +1,24 @@
 .page-section .container h2 {
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .page-section .container h3 {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .page-section .container h4 {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .page-section .container h5 {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.page-section .container p{
+.page-section .container h6 {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.page-section .container p {
   color: #ffffff;
 }
 
