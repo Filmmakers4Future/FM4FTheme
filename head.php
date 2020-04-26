@@ -11,17 +11,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="<?= html(value(Themes::class, KEYWORDS)) ?>">
-    <meta name="description" content="<?= html(value(Themes::class, DESCRIPTION)) ?>">
 <?php
+  if (null !== value(Themes::class, DESCRIPTION)) {
+?>
+    <meta name="description" content="<?= html(value(Themes::class, DESCRIPTION)) ?>">
+    <meta property="og:description" content="<?= html(value(Themes::class, DESCRIPTION)) ?>">
+<?php
+  }
   if (null !== value(Themes::class, AUTHOR)) {
 ?>
     <meta name="author" content="<?= html(value(Themes::class, AUTHOR)) ?>">
 <?php
   }
+  if (null !== value(Themes::class, "page_image")) {
 ?>
-    <meta property="og:description" content="<?= html(value(Themes::class, DESCRIPTION)) ?>">
-    <meta property="og:image" content="<?= html(absoluteurl("/user/uploads/img/preview.jpg")) ?>">
-    <meta property="og:type" content="website">
+    <meta property="og:image" content="<?= html(value(Themes::class, "page_image")) ?>">
+<?php
+  }
+?>
+    <meta property="og:type" content="<?= html(value(Themes::class, "page_type")) ?>">
     <meta property="og:title" content="<?= html(value(Themes::class, TITLE)) ?>">
 <?php
   if (null !== value(Themes::class, CANONICAL)) {

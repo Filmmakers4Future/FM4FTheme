@@ -6,7 +6,7 @@
     This file contains the theme class of the Filmmakers for Future theme.
 
     @package filmmakers4future\fm4ftheme
-    @version 0.1a4
+    @version 0.1a5
     @author  Yahe <hello@yahe.sh>
     @since   0.1a0
   */
@@ -23,7 +23,20 @@
     protected static function configureTheme() {
       // individual theme configuration
       Themes::preset("copyright_html",     null);
+      Themes::preset("page_image",         static::getDefaultAttribute("PageImage", null));
+      Themes::preset("page_info",          static::getDefaultAttribute("PageInfo", null));
+      Themes::preset("page_type",          static::getDefaultAttribute("PageType",
+                                                                       function ($result) {
+                                                                         if (null === $result) {
+                                                                           $result = "website";
+                                                                         }
+                                                                         return $result;
+                                                                       }));
       Themes::preset("replace_heading",    static::getDefaultAttribute("ReplaceHeading",
+                                                                       function ($result) {
+                                                                         return istrue($result);
+                                                                       }));
+      Themes::preset("replace_section",    static::getDefaultAttribute("ReplaceSection",
                                                                        function ($result) {
                                                                          return istrue($result);
                                                                        }));
@@ -63,7 +76,20 @@
       Themes::preset(TIMEFORMAT, "d F Y");
 
       // recommended theme configuration
-      Themes::preset(AUTHOR,      static::getDefaultAuthor());
+      Themes::preset(AUTHOR,      static::getDefaultAttribute(AUTHOR,
+                                                              function ($result) {
+                                                                // try to retrieve the first author
+                                                                if (null === $result) {
+                                                                  foreach (value(Main::class, CONTENT) as $content_item) {
+                                                                    $author = value($content_item, AUTHOR);
+                                                                    if (null !== $author) {
+                                                                      $result = $author;
+                                                                      break;
+                                                                    }
+                                                                  }
+                                                                }
+                                                                return $result;
+                                                              }));
       Themes::preset(CANONICAL,   static::getDefaultCanonical());
       Themes::preset(CHARSET,     static::getDefaultCharset());
       Themes::preset(CONTENT,     static::getDefaultAttribute(CONTENT, null));
@@ -101,15 +127,13 @@
                                                                   // retrieve all words from the titles and pagenames
                                                                   $words = [];
                                                                   foreach (value(Main::class, CONTENT) as $content_item) {
-                                                                    if ($content_item->isset(PAGENAME)) {
-                                                                      $words = array_merge($words,
-                                                                                           explode(SP, value($content_item,
-                                                                                                             PAGENAME)));
+                                                                    $pagename = value($content_item, PAGENAME);
+                                                                    if (null !== $pagename) {
+                                                                      $words = array_merge($words, explode(SP, $pagename));
                                                                     }
-                                                                    if ($content_item->isset(TITLE)) {
-                                                                      $words = array_merge($words,
-                                                                                           explode(SP, value($content_item,
-                                                                                                             TITLE)));
+                                                                    $title = value($content_item, TITLE);
+                                                                    if (null !== $title) {
+                                                                      $words = array_merge($words, explode(SP, $title));
                                                                     }
                                                                   }
                                                                   // filter all words that do not fit the scheme
@@ -124,7 +148,35 @@
                                                               }));
       Themes::preset(LANGUAGE,    static::getDefaultLanguage());
       Themes::preset(PAGENAME,    static::getDefaultPagename());
-      Themes::preset(TITLE,       static::getDefaultTitle());
+      Themes::preset(TITLE,       static::getDefaultAttribute(TITLE,
+                                                              function ($result) {
+                                                                if (null === $result) {
+                                                                  $result = value(Themes::class, SITENAME);
+                                                                  // optionally add the siteslogan if it is set
+                                                                  $siteslogan = value(Themes::class, SITESLOGAN);
+                                                                  if (null !== $siteslogan) {
+                                                                    $result = $result.SP."-".SP.$siteslogan;
+                                                                  }
+                                                                  // optionally add the pagename if it is set
+                                                                  $pagename = value(Themes::class, PAGENAME);
+                                                                  if (null !== $pagename) {
+                                                                    $result = $pagename.SP."|".SP.$result;
+                                                                  } else {
+                                                                    // handle errors and pages
+                                                                    if ((ErrorHandler::class === Handlers::getActive()) ||
+                                                                        (PageHandler::class === Handlers::getActive())) {
+                                                                      // get the first entry of the content entries
+                                                                      if (0 < count(value(Main::class, CONTENT))) {
+                                                                        $title = value(Main::class, CONTENT)[0]->isset(TITLE);
+                                                                        if (null !== $title) {
+                                                                          $result = $title.SP."|".SP.$result;
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                                return $result;
+                                                              }));
     }
 
     protected static function getDefaultAttribute($attribute, $filter = null) {
@@ -169,20 +221,6 @@
       // let the caller decide what happens with the result
       if (is_callable($filter)) {
         $result = $filter($result);
-      }
-
-      return $result;
-    }
-
-    protected static function getDefaultAuthor() {
-      $result = null;
-
-      // try to retrieve the first author
-      foreach (value(Main::class, CONTENT) as $content_item) {
-        if ($content_item->isset(AUTHOR)) {
-          $result = value($content_item, AUTHOR);
-          break;
-        }
       }
 
       return $result;
@@ -290,33 +328,6 @@
           case SearchHandler::class:
             $result = t("Suche", FM4FTheme::class).COL.SP.strtr(value($metadata, SearchHandler::SEARCH), DOT, SP);
             break;
-        }
-      }
-
-      return $result;
-    }
-
-    protected static function getDefaultTitle() {
-      $result = value(Themes::class, SITENAME);
-
-      // optionally add the siteslogan if it is set
-      if (null !== value(Themes::class, SITESLOGAN)) {
-        $result = $result.SP."-".SP.value(Themes::class, SITESLOGAN);
-      }
-
-      // optionally add the pagename if it is set
-      if (null !== value(Themes::class, PAGENAME)) {
-        $result = value(Themes::class, PAGENAME).SP."|".SP.$result;
-      } else {
-        // handle errors and pages
-        if ((ErrorHandler::class === Handlers::getActive()) ||
-            (PageHandler::class === Handlers::getActive())) {
-          // get the first entry of the content entries
-          if (0 < count(value(Main::class, CONTENT))) {
-            if (value(Main::class, CONTENT)[0]->isset(TITLE)) {
-              $result = value(value(Main::class, CONTENT)[0], TITLE).SP."|".SP.$result;
-            }
-          }
         }
       }
 

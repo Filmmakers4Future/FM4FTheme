@@ -15,7 +15,7 @@ To configure the theme you can change the corresponding settings in your configu
 ### Author name
 You can overwrite the auto-generated author header:
 ```
-Themes::set(AUTHOR, $static::getDefaultAuthor());
+Themes::set(AUTHOR, static::getDefaultAttribute(AUTHOR));
 ```
 
 ### Canonical URL
@@ -99,16 +99,40 @@ Themes::set(MENU, [[TITLE => "Linktext",
                                URI   => "https://example.net/"]]]]);
 ```
 
+### Pageimage
+You can set the following value to define the `og:image` meta header:
+```
+Themes::set("page_image", static::getDefaultAttribute("PageImage"));
+```
+
+### Pageinfo
+You can set the following value to define the descriptive sentence in the heading section:
+```
+Themes::set("page_info", static::getDefaultAttribute("PageInfo"));
+```
+
 ### Pagename
 You can overwrite the auto-generated page name that is used as an H1 headline:
 ```
-Themes::set(PAGENAME, static::getDefaultPagename());
+Themes::set(PAGENAME, static::getDefaultAttribute(PAGENAME));
+```
+
+### Pagetype
+You can set the following value to define the `og:type` meta header:
+```
+Themes::set("page_image", static::getDefaultAttribute("PageType"));
 ```
 
 ### Replace Heading
 You can set the following value to define that the default heading shall be completely replaced with the content:
 ```
 Themes::set("replace_heading", static::getDefaultAttribute("ReplaceHeading"));
+```
+
+### Replace Section
+You can set the following value to define that the section block shall be completely replaced with the content:
+```
+Themes::set("replace_section", static::getDefaultAttribute("ReplaceSection"));
 ```
 
 ### Section Alignment
@@ -157,15 +181,15 @@ The value specified here has to be supported by PHP's [date()](http://php.net/ma
 ### Title
 You can overwrite the auto-generated title header:
 ```
-Themes::set(TITLE, static::getDefaultTitle());
+Themes::set(TITLE, static::getDefaultAttribute(TITLE));
 ```
 
 ## Usage
 
 ### Special Category Handling
 
-The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the `PAGENAME`, `DESCRIPTION`, `DATE`, `SECTIONALIGNMENT` and `SECTIONBACKGROUND` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well which can be completely overwritten by setting `REPLACEHEADING` to `true`.
+The theme implements a special handling for categories. If a category `example` is used in content files and there exists a corresponding content file called `./user/content/example.md`, then the fields in the corresponding content file overwrite the theme configurations.
 
 ### Special Page Handling
 
-The implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the `PAGENAME`, `DESCRIPTION`, `DATE`, `SECTIONALIGNMENT` and `SECTIONBACKGROUND` fields are used to set the corresponding theme configurations. Furthermore, the content of that content file is used in the header as well which can be completely overwritten by setting `REPLACEHEADING` to `true`. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the page. The sections will be sorted by filename.
+The theme implements a special handling for pages. If a content file `./user/content/example.md` does not set the `CATEGORY` field, then the fields in the content file overwrite the theme configurations. Furthermore, the content of that content file is used in the heading section. For such a page the corresponding content folder `./user/content/example/` is searched for `*.md` files. If these are found and set the `SECTION` field to `true` then their content is used as individual sections of the rendered page. The sections will be sorted by filename.

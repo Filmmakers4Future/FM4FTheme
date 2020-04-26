@@ -16,9 +16,9 @@
         <h2 class="text-center text-white mt-0"><?= html(value(Themes::class, PAGENAME)) ?></h2>
 <?php
     }
-    if (null !== value(Themes::class, DESCRIPTION)) {
+    if (null !== value(Themes::class, "page_info")) {
 ?>
-        <h5 class="text-white mt-0 text-center"><?= html(value(Themes::class, DESCRIPTION)) ?></h5>
+        <h5 class="text-white mt-0 text-center"><?= html(value(Themes::class, "page_info")) ?></h5>
 <?php
     }
     if (null !== value(Themes::class, DATE)) {
@@ -148,10 +148,14 @@
       }
     }
 ?>
+<?php
+    if (!value(Themes::class, "replace_section") && !value($content_item, "ReplaceSection")) {
+?>
     <!-- <?= html($title) ?> Section -->
-    <section class="page-section <?= html($background).SP.html($alignment) ?>"<?= (null !== value($content_item, "SectionId")) ? "id=\"".value($content_item, "SectionId")."\"" : "" ?>>
+    <section class="page-section <?= html($background).SP.html($alignment) ?>" <?= (null !== value($content_item, "SectionId")) ? "id=\"".value($content_item, "SectionId")."\"" : "" ?>>
       <div class="container">
 <?php
+    }
     if (null !== $title) {
 ?>
         <h3 class="text-white-75">
@@ -207,12 +211,15 @@
         </p>
 <?php
     }
+
+    print($content);
+
+    if (!value(Themes::class, "replace_section") && !value($content_item, "ReplaceSection")) {
 ?>
-<?= $content ?>
       </div>
     </section>
-
 <?php
+    }
   }
 
   // check if pagination is needed
