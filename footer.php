@@ -30,5 +30,8 @@
 
     <!-- Custom scripts for this template -->
     <script src="<?= html(path2uri(__DIR__."/js/creative.js")) ?>"></script>
+    
+     <!-- Podlove -->
+    <script src="//podlove.fm4f.org/embed.js"></script>
   </body>
 </html>
