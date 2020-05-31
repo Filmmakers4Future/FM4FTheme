@@ -28,6 +28,10 @@
   font-weight: 300;
 }
 
+.text-right ul {
+  direction:rtl;
+}
+
 .podcastaudio {
   max-width: 600px !important;
 }
