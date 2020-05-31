@@ -386,15 +386,6 @@ h3, .h3 {
   font-size: 1.75rem;
 }
 
-h3 a {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-h3 a:hover {
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: underline;
-}
-
 h4, .h4 {
   font-size: 1.5rem;
 }

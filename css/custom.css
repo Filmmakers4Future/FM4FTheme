@@ -3,7 +3,16 @@
 }
 
 .page-section .container h3 {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.page-section .container h3 a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.page-section .container h3 a:hover {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
 }
 
 .page-section .container h4 {
@@ -25,7 +34,6 @@
 .page-section .container ol li,
 .page-section .container ul li {
   color: rgba(255, 255, 255, 0.8);
-  font-weight: 300;
 }
 
 .text-right ul {
