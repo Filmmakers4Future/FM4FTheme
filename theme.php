@@ -287,7 +287,7 @@
             break;
 
           case AuthorHandler::class:
-            $result = t("Autor", FM4FTheme::class).COL.SP.strtoupper(value($metadata, AUTHOR));
+            $result = t("Autor", FM4FTheme::class).COL.SP.ucfirst(value($metadata, AUTHOR));
             break;
 
           case CategoryHandler::class:
@@ -299,7 +299,7 @@
                           return null;
                         });
             if (null === $result) {
-              $result = t("Kategorie", FM4FTheme::class).COL.SP.strtoupper(value($metadata, CATEGORY));
+              $result = t("Kategorie", FM4FTheme::class).COL.SP.ucfirst(value($metadata, CATEGORY));
             }
             break;
 
@@ -317,7 +317,7 @@
                               return null;
                             });
                 if (null === $result) {
-                  $result = t("Kategorie", FM4FTheme::class).COL.SP.strtoupper($category);
+                  $result = t("Kategorie", FM4FTheme::class).COL.SP.ucfirst($category);
                 }
               }
             } else {
