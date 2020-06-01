@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1a6 (01.06.2020)
+### Bugfixes
+* properly generate title of pages
+
 ## 0.1a5 (26.04.2020)
 ### Feature
 * added support for `PageImage` to set the `og:image` meta header

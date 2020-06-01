@@ -157,21 +157,21 @@
                                                                   if (null !== $siteslogan) {
                                                                     $result = $result.SP."-".SP.$siteslogan;
                                                                   }
-                                                                  // optionally add the pagename if it is set
-                                                                  $pagename = value(Themes::class, PAGENAME);
-                                                                  if (null !== $pagename) {
-                                                                    $result = $pagename.SP."|".SP.$result;
-                                                                  } else {
-                                                                    // handle errors and pages
-                                                                    if ((ErrorHandler::class === Handlers::getActive()) ||
-                                                                        (PageHandler::class === Handlers::getActive())) {
-                                                                      // get the first entry of the content entries
-                                                                      if (0 < count(value(Main::class, CONTENT))) {
-                                                                        $title = value(Main::class, CONTENT)[0]->isset(TITLE);
-                                                                        if (null !== $title) {
-                                                                          $result = $title.SP."|".SP.$result;
-                                                                        }
+                                                                  // handle errors and pages
+                                                                  if ((ErrorHandler::class === Handlers::getActive()) ||
+                                                                      (PageHandler::class === Handlers::getActive())) {
+                                                                    // get the first entry of the content entries
+                                                                    if (0 < count(value(Main::class, CONTENT))) {
+                                                                      $title = value(value(Main::class, CONTENT)[0], TITLE);
+                                                                      if (null !== $title) {
+                                                                        $result = $title.SP."|".SP.$result;
                                                                       }
+                                                                    }
+                                                                  } else {
+                                                                    // optionally add the pagename if it is set
+                                                                    $pagename = value(Themes::class, PAGENAME);
+                                                                    if (null !== $pagename) {
+                                                                      $result = $pagename.SP."|".SP.$result;
                                                                     }
                                                                   }
                                                                 }
