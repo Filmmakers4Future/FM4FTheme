@@ -210,8 +210,8 @@
 ?>
         </p>
 <?php
-    }
-
+    print("<hr>");
+    } 
     print($content);
 
     if (!value(Themes::class, "replace_section") && !value($content_item, "ReplaceSection")) {
