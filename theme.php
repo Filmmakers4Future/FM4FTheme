@@ -158,6 +158,7 @@
                                                                     $result = $result.SP."-".SP.$siteslogan;
                                                                   }
                                                                   // handle errors and pages
+                                                                  $title = null;
                                                                   if ((ErrorHandler::class === Handlers::getActive()) ||
                                                                       (PageHandler::class === Handlers::getActive())) {
                                                                     // get the first entry of the content entries
@@ -167,7 +168,8 @@
                                                                         $result = $title.SP."|".SP.$result;
                                                                       }
                                                                     }
-                                                                  } else {
+                                                                  }
+                                                                  if (null === $title) {
                                                                     // optionally add the pagename if it is set
                                                                     $pagename = value(Themes::class, PAGENAME);
                                                                     if (null !== $pagename) {
