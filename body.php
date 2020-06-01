@@ -158,7 +158,7 @@
     }
     if (null !== $title) {
 ?>
-        <h3 class="text-white-75">
+        <h2 class="text-white-75">
 <?php
       if (null !== $uri) {
 ?>
@@ -174,7 +174,7 @@
 <?php
     }
 ?>
-        </h3>
+        </h2>
 <?php
     }
     if ((null !== $category) || (null !== $date)) {
