@@ -120,7 +120,18 @@
                                                                 }
                                                                 return $result;
                                                               }));
-      Themes::preset(DESCRIPTION, static::getDefaultAttribute(DESCRIPTION, null));
+      Themes::preset(DESCRIPTION, static::getDefaultAttribute(DESCRIPTION,
+                                                                    function ($result) {
+                                                                        if ((PageHandler::class === Handlers::getActive())) {
+                                                                          if (0 < count(value(Main::class, CONTENT))) {
+                                                                            $description = value(value(Main::class, CONTENT)[0], DESCRIPTION);
+                                                                            if ($description) {
+                                                                              $result = $description;
+                                                                            } 
+                                                                          }
+                                                                        }
+                                                                      return $result;
+                                                                    }));
       Themes::preset(KEYWORDS,    static::getDefaultAttribute(KEYWORDS,
                                                               function ($result) {
                                                                 if (null === $result) {
