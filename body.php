@@ -13,7 +13,7 @@
 <?php
     if (null !== value(Themes::class, PAGENAME)) {
 ?>
-        <h2 class="text-center text-white mt-0"><?= html(value(Themes::class, PAGENAME)) ?></h2>
+        <h1 class="text-center text-white mt-0"><?= html(value(Themes::class, PAGENAME)) ?></h1>
 <?php
     }
     if (null !== value(Themes::class, "page_info")) {
