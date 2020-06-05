@@ -69,7 +69,7 @@
                 callbacks[id]['errors'] = settings.callbacks.errors;
             }
 
-            var html = '<div id="tag-this--' + id + '" class="tag-this mb-4"><div id="'+id+'--addTag">';
+            var html = '<div id="tag-this--' + id + '" class="tag-this"><div id="'+id+'--addTag">';
 
             if (settings.email){
                 $(this).data('type', 'email');
