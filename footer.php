@@ -27,6 +27,7 @@
     <!-- Plugin JavaScript -->
     <script src="<?= html(path2uri(__DIR__."/vendor/jquery-easing/jquery.easing.min.js")) ?>"></script>
     <script src="<?= html(path2uri(__DIR__."/vendor/magnific-popup/jquery.magnific-popup.min.js")) ?>"></script>
+    <script src="<?= html(path2uri(__DIR__."/vendor/jquery-tagthis/jquery.tagthis.js")) ?>"></script>
 
     <!-- Custom scripts for this template -->
     <script src="<?= html(path2uri(__DIR__."/js/creative.js")) ?>"></script>

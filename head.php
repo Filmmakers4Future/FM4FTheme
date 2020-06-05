@@ -76,6 +76,7 @@
 
     <!-- Plugin CSS -->
     <link href="<?= html(path2uri(__DIR__."/vendor/magnific-popup/magnific-popup.css")) ?>" rel="stylesheet">
+    <link href="<?= html(path2uri(__DIR__."/vendor/jquery-tagthis/jquery-tag-this.css")) ?>" rel="stylesheet">
 
     <!-- Theme CSS - Includes Bootstrap -->
     <link href="<?= html(path2uri(__DIR__."/css/creative.css")) ?>" rel="stylesheet">
