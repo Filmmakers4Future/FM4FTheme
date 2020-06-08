@@ -107,7 +107,12 @@
               <div class="dropdown-menu dropdown-menu-left animate slideIn" aria-labelledby="navbarDropdown">
 <?php
             foreach ($menu_item[MENU] as $submenu_item) {
-              if (isset($submenu_item[TITLE]) && isset($submenu_item[URI])) {
+              if (isset($submenu_item[TITLE]) ) {
+                if ($submenu_item[TITLE] == "divider") {
+?>
+                  <div class="dropdown-divider"></div>
+<?php
+                } elseif (isset($submenu_item[TITLE]) && isset($submenu_item[URI])) {
                 // handle local scrolling links
                 $local = false;
                 if (null !== value(Main::class, URI)) {
@@ -123,7 +128,7 @@
 ?>
                 <a class="dropdown-item<?= ($local) ? " js-scroll-trigger" : "" ?>" href="<?= html($submenu_item[URI]) ?>"><?= html($submenu_item[TITLE]) ?></a>
 <?php
-              }
+                }}
             }
 ?>
               </div>
