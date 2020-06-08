@@ -54,7 +54,23 @@
   overflow-x: hidden;
 }
 
-#map {
+#map.page-section {
   background: url("/user/uploads/img/map.png") no-repeat center center fixed;
   background-size: cover;
+}
+
+@media (min-width: 576px) {
+  .page-section#map .container {
+    padding-left: 25px;
+    padding-right: 25px;
+    max-width: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .page-section#map .container {
+    padding-left: 55px;
+    padding-right: 55px;
+    max-width: none;
+  }
 }
