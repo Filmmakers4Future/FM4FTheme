@@ -128,6 +128,10 @@
 ?>
                 <a class="dropdown-item<?= ($local) ? " js-scroll-trigger" : "" ?>" href="<?= html($submenu_item[URI]) ?>"><?= html($submenu_item[TITLE]) ?></a>
 <?php
+                } else {
+?>
+                  <h6 class="dropdown-header"><?= html($submenu_item[TITLE]) ?></h6>
+<?php
                 }}
             }
 ?>
