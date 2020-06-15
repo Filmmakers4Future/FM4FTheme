@@ -23,7 +23,18 @@
     protected static function configureTheme() {
       // individual theme configuration
       Themes::preset("copyright_html",     null);
-      Themes::preset("page_image",         static::getDefaultAttribute("PageImage", null));
+      Themes::preset("page_image",         static::getDefaultAttribute("PageImage", 
+                                                                        function ($result) {
+                                                                            if ((PageHandler::class === Handlers::getActive())) {
+                                                                              if (0 < count(value(Main::class, CONTENT))) {
+                                                                                $pageImage = value(value(Main::class, CONTENT)[0], "PageImage");
+                                                                                if ($pageImage) {
+                                                                                  $result = $pageImage;
+                                                                                } 
+                                                                              }
+                                                                            }
+                                                                          return $result;
+                                                                        }));
       Themes::preset("page_info",          static::getDefaultAttribute("PageInfo", null));
       Themes::preset("page_type",          static::getDefaultAttribute("PageType",
                                                                        function ($result) {
