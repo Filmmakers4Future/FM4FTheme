@@ -188,3 +188,10 @@ blockquote p {
   color: #1DA64A!important;
 }
 }
+#mainNav.navbar .nav-item a[href^="http://"]:not([href*="filmmakersforfuture.org"]):after,
+#mainNav.navbar .nav-item a[href^="https://"]:not([href*="filmmakersforfuture.org"]):after {
+  content: "\2197\0020";
+  padding-left: 3px;
+  color:gray;
+  white-space: nowrap;
+}
