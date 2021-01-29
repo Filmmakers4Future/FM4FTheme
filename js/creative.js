@@ -81,3 +81,6 @@ $(
     }
   }
 )
+
+$('a[href="' + this.location.pathname + '"]').addClass('active');
+$('a[href="' + this.location.pathname + '"]').parent().parent().children('a').addClass('active');
