@@ -246,3 +246,10 @@ blockquote p {
 .calendarItem .calendarTag .red {
   border-color: red;
 }
+
+#LanguagePicker {
+  margin-top: 20px;
+}
+#LanguagePicker a {
+  color: gray;
+}
