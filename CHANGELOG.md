@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1a7 (03.02.2021)
+### Feature
+* support pages in subfolders
+
 ## 0.1a6 (01.06.2020)
 ### Bugfixes
 * properly generate title of pages

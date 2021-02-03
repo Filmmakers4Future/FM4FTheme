@@ -6,7 +6,7 @@
     This file contains the theme class of the Filmmakers for Future theme.
 
     @package filmmakers4future\fm4ftheme
-    @version 0.1a5
+    @version 0.1a7
     @author  Yahe <hello@yahe.sh>
     @since   0.1a0
   */
@@ -379,28 +379,32 @@
       if ((FM4FHandler::class === Handlers::getActive()) ||
           (PageHandler::class === Handlers::getActive())) {
         // extract the potential folder name
-        $filename = basename(value(value(Main::class, CONTENT)[0], FilePlugin::FILE), FilePlugin::EXTENSION);
+        $filename = value(value(Main::class, CONTENT)[0], FilePlugin::FILE);
+        if ((0 === strpos($filename, FilePlugin::getPath())) &&
+            ((strlen($filename)-strlen(FilePlugin::EXTENSION)) === strrpos($filename, FilePlugin::EXTENSION))) {
+          $filename = substr($filename, strlen(FilePlugin::getPath()), -strlen(FilePlugin::EXTENSION));
 
-        // retrieve the sections
-        $content = callcontent($filename, true, false,
-                               function ($content) {
-                                 // ignore files where "section" is not set to true
-                                 if (istrue(value($content, "section"))) {
-                                   return $content;
-                                 } else {
-                                   return null;
-                                 }
-                               });
+          // retrieve the sections
+          $content = callcontent($filename, true, false,
+                                 function ($content) {
+                                   // ignore files where "section" is not set to true
+                                   if (istrue(value($content, "section"))) {
+                                     return $content;
+                                   } else {
+                                     return null;
+                                   }
+                                 });
 
-        // if there is something left
-        if (null !== $content) {
-          // make sure that we set an array
-          if ($content instanceof Content) {
-            $content = [$content];
+          // if there is something left
+          if (null !== $content) {
+            // make sure that we set an array
+            if ($content instanceof Content) {
+              $content = [$content];
+            }
+
+            // set the sections as the new content
+            Main::set(CONTENT, $content);
           }
-
-          // set the sections as the new content
-          Main::set(CONTENT, $content);
         }
       }
     }
