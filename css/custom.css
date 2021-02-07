@@ -35,6 +35,59 @@
   color: #ffffff;
 }
 
+.page-section .container table {
+  margin-bottom: 20px;
+}
+
+.page-section .container table thead tr {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.page-section .container table tbody tr {
+  color: #ffffff;
+}
+
+.page-section .container table th, td {
+  padding-left: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+}
+
+.page-section .container table th {
+  background-color: #1B7340;
+  color: white;
+}
+
+.page-section .container table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.page-section .container table tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.page-section .container table thead tr:first-child th:first-child, 
+.page-section .container table table tr:first-child td:first-child,
+.page-section .container table tbody tr:first-child th:first-child {
+  border-top-left-radius: 5px;
+}
+.page-section .container table thead tr:first-child th:last-child, 
+.page-section .container table table tr:first-child td:last-child,
+.page-section .container table tbody tr:first-child th:last-child {
+  border-top-right-radius: 5px;
+}
+.page-section .container table tbody tr:last-child td:first-child, 
+.page-section .container table table tr:last-child td:first-child,
+.page-section .container table tbody tr:last-child th:first-child {
+  border-bottom-left-radius: 5px;
+}
+.page-section .container table tbody tr:last-child td:last-child, 
+.page-section .container table table tr:last-child td:last-child,
+.page-section .container table tbody tr:last-child th:last-child {
+  border-bottom-right-radius: 5px;
+}
+
 .page-section .container ol li,
 .page-section .container ul li {
   color: rgba(255, 255, 255, 0.8);
