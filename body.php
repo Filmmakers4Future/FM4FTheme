@@ -204,7 +204,7 @@
 <?php
 
           // set for additional iterations
-          $in_or_and = "and";
+          $in_or_and = "-";
         }
       }
 ?>
