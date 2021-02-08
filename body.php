@@ -200,7 +200,7 @@
 
           $link = CategoryHandler::getUri($metadata);
 ?>
-          <?= html($in_or_and) ?> <a href="<?= html($link) ?>"><?= html(ucfirst($category_item)) ?></a>
+          <?= html($in_or_and) ?> <a href="<?= html($link) ?>"><?= html(ucwords((str_replace("_", " ", $category_item)))) ?></a>
 <?php
 
           // set for additional iterations

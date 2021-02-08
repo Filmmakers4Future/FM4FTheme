@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1a8 (03.02.2021)
+### Feature
+* render "_" as space in categories
+
 ## 0.1a7 (03.02.2021)
 ### Feature
 * support pages in subfolders

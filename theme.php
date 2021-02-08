@@ -323,7 +323,7 @@
                           return null;
                         });
             if (null === $result) {
-              $result = t("Kategorie", FM4FTheme::class).COL.SP.ucfirst(value($metadata, CATEGORY));
+              $result = t("Kategorie", FM4FTheme::class).COL.SP.ucwords((str_replace("_", " ", value($metadata, CATEGORY))));
             }
             break;
 
@@ -341,7 +341,7 @@
                               return null;
                             });
                 if (null === $result) {
-                  $result = t("Kategorie", FM4FTheme::class).COL.SP.ucfirst($category);
+                  $result = t("Kategorie", FM4FTheme::class).COL.SP.ucwords((str_replace("_", " ", $category)));
                 }
               }
             } else {
