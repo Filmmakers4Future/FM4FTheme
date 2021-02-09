@@ -306,3 +306,7 @@ blockquote p {
 #LanguagePicker a {
   color: gray;
 }
+
+.border {
+  border-radius: 5px;
+}
