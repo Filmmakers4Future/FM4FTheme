@@ -49,6 +49,15 @@
 	background-color: #1DA64A;
 	border: #1DA64A;
 }
+.pretix-widget-alert-box button {
+	transition: background-color 0.4s ease;
+	background-color: #1B7340;
+	border: #1B7340;
+}
+.pretix-widget-alert-box button:hover {
+	background-color: #1DA64A;
+	border: #1DA64A;
+}
 .pretix-widget {
 	width: 100%;
 	padding-left: 20px;
@@ -67,6 +76,7 @@
 	margin-top: 20px;
 	background-color: transparent;
 	color:white;
+	border:none;
 }
 
 .pretix-widget .pretix-widget-info-message:after {
@@ -78,4 +88,5 @@
 	display: block;
 	clear: both;
 	background-color: rgba(255, 255, 255, 0.1);
+	margin-top: 15px;
 }
