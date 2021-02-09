@@ -25,6 +25,19 @@
 .pretix-widget-attribution a:hover {
 	color: rgba(255, 255, 255, 0.4);
 }
+.pretix-widget-primary-color {
+	fill: #1B7340;
+}
+.pretix-widget button {
+	border-radius: 8px;
+	transition: background-color 0.4s ease;
+	background-color: #1B7340;
+	border: #1B7340;
+}
+.pretix-widget button:hover {
+	background-color: #1DA64A;
+	border: #1DA64A;
+}
 .pretix-widget-action button {
 	border-radius: 8px;
 	height:40px;
