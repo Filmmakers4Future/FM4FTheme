@@ -253,11 +253,6 @@ blockquote p {
   max-width: 4000px;
 }
 .calendarItem {
-  position: relative;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  /*border: 1px dotted gray;*/
   padding-bottom: 12px;
   padding-top: 10px;
 }
@@ -265,14 +260,9 @@ blockquote p {
   border-top: 1px solid gray;
   margin:0px;
 }
-.calendarItem .image {
-  float:left;
-  width: auto;
-  margin-right: 20px;
-}
+
 .calendarItem .image img {
   border-radius: 20px;
-  max-height: 170px;
 }
 
 .calendarItem .summary a:hover {
@@ -294,10 +284,6 @@ blockquote p {
   padding-top: 3px;
   padding-bottom: 3px;
   text-transform: capitalize;
-}
-
-.calendarItem .calendarTag .red {
-  border-color: red;
 }
 
 #LanguagePicker {
