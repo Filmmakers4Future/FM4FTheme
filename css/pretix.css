@@ -29,7 +29,6 @@
 	fill: #1B7340;
 }
 .pretix-widget button {
-	border-radius: 8px;
 	transition: background-color 0.4s ease;
 	background-color: #1B7340;
 	border: #1B7340;
@@ -61,4 +60,22 @@
 
 .pretix-widget .pretix-widget-item-count-single-label {
 	text-align: right;
+}
+
+.pretix-widget .pretix-widget-info-message {
+	border-radius: 30px;
+	margin-top: 20px;
+	background-color: transparent;
+	color:white;
+}
+
+.pretix-widget .pretix-widget-info-message:after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left: 0;
+	display: block;
+	clear: both;
+	background-color: rgba(255, 255, 255, 0.1);
 }
