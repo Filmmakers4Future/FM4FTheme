@@ -54,7 +54,7 @@
       Themes::preset("section_alignment",  static::getDefaultAttribute("SectionAlignment",
                                                                        function ($result) {
                                                                          // only allow supported values
-                                                                         switch (strtolower($result)) {
+                                                                         switch (strtolower((string) $result)) {
                                                                            case "alternate":
                                                                            case "center":
                                                                            case "left":
@@ -68,7 +68,7 @@
       Themes::preset("section_background", static::getDefaultAttribute("SectionBackground",
                                                                        function ($result) {
                                                                          // only allow supported values
-                                                                         switch (strtolower($result)) {
+                                                                         switch (strtolower((string) $result)) {
                                                                            case "alternate":
                                                                            case "dark":
                                                                            case "primary":
